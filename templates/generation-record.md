@@ -1,7 +1,7 @@
 # Generation record
 
-- Runtime schema: `aiflow.image-result.v1`
-- Backend: AIFlow
+- Runtime schema: `image-gen.result.v1`
+- Provider / harness
 - Canonical model:
 - Live capability evidence / models request ID:
 - Generation request ID:

@@ -1,12 +1,13 @@
-# Brand production
+# Brand-sensitive production
 
-For ArcheBase work, load `archebase-vi-guide` and its image playbook.
+Read this when an official logo, house typography, a brand guide or a regulated claim applies. If your organization ships a brand-guide skill, load it and let it own the rules; this file only covers what is generic.
 
-- Generate the background or scene without Logo and final text.
-- Prefer real robot, sensor, site and data evidence when available.
-- Do not generate the ArcheBase mark, wordmark or brand-like approximation.
-- Do not generate final headlines or data labels.
-- Place approved V2 assets and real typography in deterministic post-production.
-- Check final crop, contrast, minimum-size behavior, source rights, claims and export QA.
+- Generate the scene without the logo and without final copy.
+- Never generate, redraw, approximate or restyle an official mark — composite the approved asset afterwards.
+- Never let generated text stand in for final headlines, labels, metrics or diagrams.
+- Prefer real evidence (photographs, screenshots, measured data) when a claim depends on it; generated imagery suits atmosphere, abstraction and concept art.
+- Add approved assets and real typography deterministically, from source files, at the end.
+- Check the composed result at final size and at thumbnail size, plus crop, contrast, minimum-size behavior, source rights and claim accuracy.
+- A generated image is not brand-approved because it uses the right colours. Only the composed artifact can pass the gates.
 
-A generated image is not brand-approved merely because it uses blue. The final composed artifact must pass the VI Guide gates.
+When an external brand guide is loaded, its rules win over this file.

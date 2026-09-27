@@ -1,72 +1,81 @@
 {
-  "skill_name": "aiflow-image-gen",
-  "gateway_verified_at": "2026-09-26",
-  "gateway": "https://aiflow.archebase.ai/v1",
+  "skill_name": "image-gen",
   "evals": [
     {
       "id": 1,
-      "prompt": "通过 AIFlow 生成一张 1024x1024 的 PNG 产品概念图，保存到 outputs/product.png。",
-      "expected_output": "The agent runs scripts/aiflow_image.py, lets the gateway pick an image-capable model, and returns the verified file plus provenance.",
+      "prompt": "生成一张 1024x1024 的产品概念图并保存到 outputs/product.png。",
+      "expected_output": "The agent produces the image with the harness's image-capable model and saves it through save_image.py, returning the verified file and provenance.",
       "files": [],
       "expectations": [
-        "Uses scripts/aiflow_image.py and the AIFlow token service, not a provider API.",
-        "Selects a model the gateway reports as image-generation capable.",
-        "Returns the image path, SHA-256 and provenance path without printing the credential or Base64."
+        "Uses the harness's own image-capable model rather than asking for a credential.",
+        "Saves through scripts/save_image.py instead of leaving the image only in the transcript.",
+        "Returns the image path, SHA-256 and provenance path without printing raw Base64."
       ]
     },
     {
       "id": 2,
-      "prompt": "生成一张 1024x1024 的图，但输出路径 outputs/product.jpg 已经存在。",
-      "expected_output": "The agent declines to overwrite by default and explains that overwrite=true is required or a new path should be chosen.",
+      "prompt": "生成一张图，保存到 outputs/product.png（该文件已存在）。",
+      "expected_output": "The agent declines to overwrite by default and explains that --overwrite or a new path is required.",
       "files": [],
       "expectations": [
         "Does not silently overwrite an existing artifact.",
-        "Reports artifact_exists before making any billed request.",
-        "Offers overwrite=true or a new versioned path as the fix."
+        "Reports artifact_exists and offers --overwrite or a versioned path."
       ]
     },
     {
       "id": 3,
-      "prompt": "用 gpt-image-2.5 生成一张图。",
-      "expected_output": "The agent reports that the gateway lists gpt-image-2.5 but it reports no usable endpoint, and suggests gpt-image-2 instead.",
+      "prompt": "模型返回了一个 JSON，里面有 data[0].b64_json。帮我保存成图片。",
+      "expected_output": "The agent saves the payload with save_image.py, which validates the container and decodes the bitmap before writing.",
       "files": [],
       "expectations": [
-        "Checks supported_endpoint_types rather than trusting the model name.",
-        "Reports model_unavailable with the available image models.",
-        "Does not silently substitute a different model without saying so."
+        "Accepts the images-API response shape as input.",
+        "Validates the container and decodes the bitmap before writing.",
+        "Writes a provenance sidecar alongside the image."
       ]
     },
     {
       "id": 4,
-      "prompt": "为智域基石公众号做 3 套机器人触觉主题首图，横版和方图，最后放官方 Logo 和标题。",
-      "expected_output": "The agent runs a bounded candidate round as separate n=1 requests, keeps generated pixels free of logo and typography, and derives crops deterministically.",
+      "prompt": "把一张返回的图片存成 out.png，但那个 payload 的最后几个字节被截断了。",
+      "expected_output": "The agent reports invalid_image instead of writing a corrupt file.",
       "files": [],
       "expectations": [
-        "Does not ask the model to generate the official logo or final text.",
-        "Uses separate requests with distinct output paths for the candidates.",
-        "Derives variants with scripts/make_variants.py and loads archebase-vi-guide."
+        "Detects the truncated container.",
+        "Writes no artifact when verification fails.",
+        "Reports the failure honestly rather than saving a placeholder."
       ]
     },
     {
       "id": 5,
-      "prompt": "生成几张风格统一的机器人海报，并说明每轮修改依据。",
-      "expected_output": "The agent states subject/style invariants up front, changes one variable per iteration, and does not claim reference-image consistency the gateway cannot provide.",
+      "prompt": "为品牌公众号做 3 套主题首图，横版和方图，最后放官方 Logo 和标题。",
+      "expected_output": "The agent runs a bounded candidate set as separate requests, keeps generated pixels free of logo and typography, and derives crops deterministically.",
+      "files": [],
+      "expectations": [
+        "Does not ask the model to generate the official logo or final text.",
+        "Uses separate requests with distinct output paths for the candidates.",
+        "Derives variants with scripts/make_variants.py.",
+        "Loads the organisation's brand guide when one applies."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "图生成好了，但我的编辑器里没显示。再生成一次吧。",
+      "expected_output": "The agent refuses to regenerate, points at the saved file and provenance, and treats the display gap as a presentation problem.",
+      "files": [],
+      "expectations": [
+        "Does not issue a second request for an artifact that already exists.",
+        "Returns the existing image and provenance paths.",
+        "Explains that delivery is the file, not the UI."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "生成一组风格统一的机器人海报，并说明每轮修改依据。",
+      "expected_output": "The agent states subject and style invariants up front, changes one variable per iteration, and does not claim reference-image consistency the model cannot provide.",
       "files": [],
       "expectations": [
         "Defines invariants before generating.",
         "Changes one named variable per iteration.",
         "Does not claim edit or reference-image support without evidence."
-      ]
-    },
-    {
-      "id": 6,
-      "prompt": "生成成功了，但我的编辑器里没显示图片。再生成一次吧。",
-      "expected_output": "The agent refuses to regenerate, points at the saved file and provenance, and treats the display gap as a presentation problem.",
-      "files": [],
-      "expectations": [
-        "Does not issue a second billed request for an artifact that already exists.",
-        "Returns the existing image and provenance paths.",
-        "Explains that delivery is the file, not the UI."
       ]
     }
   ]

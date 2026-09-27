@@ -1,45 +1,47 @@
-# AIFlow Image Gen
+# image-gen
 
-Skill for generating and producing images through the AIFlow token service (New API gateway at `https://aiflow.archebase.ai/v1`).
+A provider-neutral skill for generating images and delivering them as verified files.
+
+It does not own model access. Whatever image-capable model your harness can already dispatch is the model it uses. The skill adds the parts that are easy to get wrong: prompt craft, candidate discipline, artifact verification, provenance and release QA.
 
 ## Requirements
 
-- Python 3.10 or newer
+- Python 3.10+
 - Pillow
-- `ARCHEBASE_API_KEY` from the AIFlow token service
-- optional `AIFLOW_BASE_URL` (defaults to `https://aiflow.archebase.ai/v1`)
 
 ```sh
 python3 -m pip install -r requirements.txt
 ```
 
-The runtime reads only `AIFLOW_BASE_URL` and `ARCHEBASE_API_KEY`. It never reads `OPENAI_*` or `ANTHROPIC_*`, and it never follows redirects.
+No endpoint or credential configuration. `scripts/*.py` never make a network request and never read a credential.
 
-## Check usable models
+## Use
 
-```sh
-python3 scripts/aiflow_image.py models
-```
-
-The listing is advisory. `supported_endpoint_types` reflects the gateway's own record and does not prove routing: measured on 2026-09-26, `gpt-image-2.5` reports an empty list yet generates successfully. The generation call is the authoritative test, so `models` is only a hint list.
-
-Default model is `gpt-image-2`. Set `model` in the request to use another, for example `gpt-image-2.5`.
-
-## Generate an image
+1. Ask your harness's image-capable model to produce the image.
+2. Save the payload as a verified artifact:
 
 ```sh
-cp templates/image-request.json request.json
-python3 scripts/aiflow_image.py generate --request request.json
+python3 scripts/save_image.py \
+  --input response.json \
+  --output out/hero.png \
+  --prompt "a blue circle on white" \
+  --model "<model id>"
 ```
 
-The command makes one `n=1` request, verifies the returned bitmap, and writes the image plus `<image-path>.json` provenance. It refuses to overwrite an existing file unless the request sets `overwrite: true`.
+`--input` accepts an images API response (`data[0].b64_json`), a payload with `b64_json` / `image_base64` / `b64`, or a raw image file. The tool writes the image plus `<image>.json` provenance and refuses to overwrite unless `--overwrite` is passed.
 
-Requested `size`/`quality` may be normalized by the gateway; returned values are authoritative and differences appear as warnings.
+## Tools
 
-## Local checks
+| Tool | Purpose |
+|---|---|
+| `scripts/save_image.py` | Verify a payload; write image + provenance |
+| `scripts/inspect_image.py` | Format, dimensions, mode, size, SHA-256 |
+| `scripts/make_variants.py` | Deterministic crops; keeps alpha; refuses overwrite |
+
+## Verify
 
 ```sh
 python3 -m unittest discover -s tests -v
 ```
 
-The test suite runs against an in-process mock gateway; it needs no credential and performs no external request.
+Tests are local and require no credential and no network.
