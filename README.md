@@ -30,11 +30,23 @@ python3 scripts/save_image.py \
 
 `--input` accepts an images API response (`data[0].b64_json`), a payload with `b64_json` / `image_base64` / `b64`, or a raw image file. The tool writes the image plus `<image>.json` provenance and refuses to overwrite unless `--overwrite` is passed.
 
+If the harness reports a successful generation but never hands back the payload — nothing renders, no file appears — recover the completed result instead of generating again. Mark before the call, extract after it:
+
+```sh
+python3 scripts/recover_harness_image.py mark --create-in tmp/imagegen
+python3 scripts/recover_harness_image.py extract \
+  --marker "/absolute/path/printed/by/mark" \
+  --out-dir output/imagegen --name "descriptive-name"
+```
+
+The recovered payload goes through `save_image.py`, so the artifact and its provenance are identical in kind to a delivered one. The tool reads the harness's local task logs and never modifies them. See `references/artifact-delivery.md`.
+
 ## Tools
 
 | Tool | Purpose |
 |---|---|
 | `scripts/save_image.py` | Verify a payload; write image + provenance |
+| `scripts/recover_harness_image.py` | Recover a completed result the harness never handed back (Codex adapter) |
 | `scripts/inspect_image.py` | Format, dimensions, mode, size, SHA-256 |
 | `scripts/make_variants.py` | Deterministic crops; keeps alpha; refuses overwrite |
 

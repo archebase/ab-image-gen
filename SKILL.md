@@ -23,6 +23,11 @@ This skill is about producing images well and delivering files that can be trust
        --prompt "<the prompt used>" --model "<model id>"
    ```
 
+   If the harness reports success but never hands back the payload (nothing
+   renders, no file appears), recover the completed result instead of generating
+   again: `scripts/recover_harness_image.py`, documented in
+   `references/artifact-delivery.md`.
+
 4. Read `references/artifact-delivery.md` before choosing an output path.
 5. Read `references/iteration-and-review.md` before selecting or revising candidates; read `references/consistency.md` when a subject must stay stable across images.
 6. Read `references/brand-production.md` when an official logo, house typography or a brand guide applies.
@@ -42,6 +47,7 @@ This skill is about producing images well and delivering files that can be trust
 | Tool | Purpose |
 |---|---|
 | `scripts/save_image.py` | Verify a payload and write the image plus a provenance sidecar |
+| `scripts/recover_harness_image.py` | Recover a completed result the harness never handed back; saves through `save_image.py` |
 | `scripts/inspect_image.py` | Report format, dimensions, mode, size and SHA-256 for existing files |
 | `scripts/make_variants.py` | Deterministic crops from a master; preserves alpha, refuses overwrite |
 
@@ -53,7 +59,7 @@ These tools never make a network request and never read a credential.
 - One image per request. A candidate set is several requests with distinct output paths.
 - Never claim a capability the harness did not demonstrate — no assumed edit, reference-image, transparency or streaming support.
 - Never retry automatically. If a call failed, re-decide with the user; an unknown billing state is not a retry signal.
-- A saved artifact is not regenerated because a UI failed to display it.
+- A saved artifact is not regenerated because a UI failed to display it. If the harness lost the result, recover the completed call (`scripts/recover_harness_image.py`); a second generation is never the remedy.
 - Keep generated pixels free of official logos and final copy; composite those deterministically.
 
 ## Output contract
