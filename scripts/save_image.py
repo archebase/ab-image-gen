@@ -31,7 +31,7 @@ import tempfile
 from typing import Any
 
 
-RESULT_SCHEMA = "image-gen.result.v1"
+RESULT_SCHEMA = "ab-image-gen.result.v1"
 DEFAULT_MAX_IMAGE_BYTES = 96 * 1024 * 1024
 MAX_IMAGE_EDGE = 4096
 MAX_IMAGE_PIXELS = 16_777_216

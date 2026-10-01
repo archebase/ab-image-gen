@@ -1,6 +1,6 @@
 # Generation record
 
-- Runtime schema: `image-gen.result.v1`
+- Runtime schema: `ab-image-gen.result.v1`
 - Provider / harness
 - Canonical model:
 - Live capability evidence / models request ID:

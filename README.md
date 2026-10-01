@@ -1,4 +1,4 @@
-# image-gen
+# ab-image-gen
 
 A provider-neutral skill for generating images and delivering them as verified files.
 
@@ -33,10 +33,10 @@ python3 scripts/save_image.py \
 If the harness reports a successful generation but never hands back the payload — nothing renders, no file appears — recover the completed result instead of generating again. Mark before the call, extract after it:
 
 ```sh
-python3 scripts/recover_harness_image.py mark --create-in tmp/imagegen
+python3 scripts/recover_harness_image.py mark --create-in tmp/ab-image-gen
 python3 scripts/recover_harness_image.py extract \
   --marker "/absolute/path/printed/by/mark" \
-  --out-dir output/imagegen --name "descriptive-name"
+  --out-dir output/ab-image-gen --name "descriptive-name"
 ```
 
 The recovered payload goes through `save_image.py`, so the artifact and its provenance are identical in kind to a delivered one. The tool reads the harness's local task logs and never modifies them. See `references/artifact-delivery.md`.

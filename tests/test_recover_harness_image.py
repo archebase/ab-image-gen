@@ -152,7 +152,7 @@ class ExtractCommandTests(unittest.TestCase):
             artifact = out_dir / "recovered.png"
             self.assertEqual(artifact.read_bytes(), png_bytes())
             manifest = json.loads((out_dir / "recovered.png.json").read_text(encoding="utf-8"))
-            self.assertEqual(manifest["schema"], "image-gen.result.v1")
+            self.assertEqual(manifest["schema"], "ab-image-gen.result.v1")
             self.assertEqual(manifest["provider"], "codex")
             self.assertEqual(manifest["prompt"], "poster background")
             self.assertEqual(manifest["generation_id"], "ig_test")

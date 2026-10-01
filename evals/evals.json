@@ -1,5 +1,5 @@
 {
-  "skill_name": "image-gen",
+  "skill_name": "ab-image-gen",
   "evals": [
     {
       "id": 1,
@@ -86,7 +86,7 @@
       "expectations": [
         "Recovers the completed result instead of calling the model again.",
         "Marks before the call and extracts after it, when the generation still has to be made.",
-        "Saves through scripts/save_image.py so the recovered artifact carries image-gen.result.v1 provenance.",
+        "Saves through scripts/save_image.py so the recovered artifact carries ab-image-gen.result.v1 provenance.",
         "Reports the saved path, SHA-256 and provenance path without printing raw Base64.",
         "Reports a non-zero exit as a failure instead of substituting a placeholder or a fabricated path."
       ]

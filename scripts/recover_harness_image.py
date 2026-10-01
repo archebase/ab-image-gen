@@ -45,7 +45,7 @@ if str(SCRIPT_DIR) not in sys.path:
 import save_image as image_tools  # the one save/verify path; no duplicated rules
 
 UTC = dt.timezone.utc
-MARKER_PREFIX = ".image-gen-recovery-"
+MARKER_PREFIX = ".ab-image-gen-recovery-"
 MARKER_SUFFIX = ".marker"
 ADAPTERS = ("codex",)
 
@@ -182,7 +182,7 @@ def command_mark(args: argparse.Namespace) -> int:
 def save_recovered(call: dict[str, Any], output: Path, args: argparse.Namespace) -> dict[str, Any]:
     """Hand one recovered payload to save_image.py and return its report."""
     payload = {"data": [{"b64_json": call["result"], "generation_id": call["id"]}]}
-    with tempfile.TemporaryDirectory(prefix="image-gen-recovery-") as scratch:
+    with tempfile.TemporaryDirectory(prefix="ab-image-gen-recovery-") as scratch:
         payload_path = Path(scratch) / "recovered.json"
         payload_path.write_text(json.dumps(payload), encoding="utf-8")
         command = [

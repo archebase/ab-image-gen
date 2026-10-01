@@ -1,14 +1,14 @@
 ---
-name: image-gen
-description: Generate and deliver raster images as verifiable files. Use whenever an image must be produced and saved — one-shot generation, candidate sets, controlled iteration, consistent visual families, campaign masters, deterministic crops, artifact recovery or brand-sensitive graphics. Provider-neutral: it works with whatever image-capable model the harness can already dispatch, and adds prompt craft, candidate discipline, artifact verification, provenance and release QA on top.
+name: ab-image-gen
+description: "Generate and deliver raster images as verifiable files. Use whenever an image must be produced and saved — one-shot generation, candidate sets, controlled iteration, consistent visual families, campaign masters, deterministic crops, artifact recovery or brand-sensitive graphics. Provider-neutral: it works with whatever image-capable model the harness can already dispatch, and adds prompt craft, candidate discipline, artifact verification, provenance and release QA on top."
 license: Internal
 metadata:
-  version: "1.0.0"
-  result_schema: "image-gen.result.v1"
+  version: "2.0.0"
+  result_schema: "ab-image-gen.result.v1"
 compatibility: "Requires Python 3.10+ and Pillow. No credential or endpoint configuration: the harness performs the model call."
 ---
 
-# Image Generation
+# ab-image-gen
 
 This skill is about producing images well and delivering files that can be trusted. It does not own model access: whatever image-capable model the harness can already dispatch is the model to use. The skill contributes prompt craft, candidate discipline, verification and delivery.
 

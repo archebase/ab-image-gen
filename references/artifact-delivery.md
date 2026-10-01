@@ -21,17 +21,17 @@ The saved file plus provenance is the source of truth. A harness that fails to d
 
 ## When the harness never hands back the payload
 
-Some harnesses report a successful generation and lose the result: nothing renders, and no file appears. The completed result usually still exists in the harness's own task log, and that is what `scripts/recover_harness_image.py` reads. It is a recovery path, not a second generator, and it is not a second delivery path either: it hands the recovered payload to `save_image.py`, so a recovered image gets the same container check, decode, dimension check, atomic write and `image-gen.result.v1` provenance as one the harness handed back.
+Some harnesses report a successful generation and lose the result: nothing renders, and no file appears. The completed result usually still exists in the harness's own task log, and that is what `scripts/recover_harness_image.py` reads. It is a recovery path, not a second generator, and it is not a second delivery path either: it hands the recovered payload to `save_image.py`, so a recovered image gets the same container check, decode, dimension check, atomic write and `ab-image-gen.result.v1` provenance as one the harness handed back.
 
 Mark immediately before the call, recover immediately after it:
 
 ```sh
-python3 scripts/recover_harness_image.py mark --create-in tmp/imagegen
+python3 scripts/recover_harness_image.py mark --create-in tmp/ab-image-gen
 # ... the harness call ... use the marker path it printed; shell variables do not
 # survive across tool calls, so carry the absolute path
 python3 scripts/recover_harness_image.py extract \
     --marker "/absolute/path/printed/by/mark" \
-    --out-dir output/imagegen --name "descriptive-name"
+    --out-dir output/ab-image-gen --name "descriptive-name"
 ```
 
 Rules:
@@ -47,4 +47,4 @@ Supported harnesses: `codex` — `$CODEX_HOME/sessions` and `$CODEX_HOME/archive
 
 ## Provenance contents
 
-`image-gen.result.v1`: schema, creation time, source, decoded artifact metadata (format, dimensions, mode, bytes, SHA-256), returned payload metadata, and any of prompt, model, provider, request ID, generation ID and usage that were available. Never the raw Base64 payload.
+`ab-image-gen.result.v1`: schema, creation time, source, decoded artifact metadata (format, dimensions, mode, bytes, SHA-256), returned payload metadata, and any of prompt, model, provider, request ID, generation ID and usage that were available. Never the raw Base64 payload.
