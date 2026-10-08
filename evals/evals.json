@@ -6,7 +6,7 @@
       "prompt": "生成一张 1024x1024 的产品概念图并保存到 outputs/product.png。",
       "expected_output": "The agent produces the image with the harness's image-capable model and saves it through save_image.py, returning the verified file and provenance.",
       "files": [],
-      "expectations": [
+      "assertions": [
         "Uses the harness's own image-capable model rather than asking for a credential.",
         "Saves through scripts/save_image.py instead of leaving the image only in the transcript.",
         "Returns the image path, SHA-256 and provenance path without printing raw Base64."
@@ -17,7 +17,7 @@
       "prompt": "生成一张图，保存到 outputs/product.png（该文件已存在）。",
       "expected_output": "The agent declines to overwrite by default and explains that --overwrite or a new path is required.",
       "files": [],
-      "expectations": [
+      "assertions": [
         "Does not silently overwrite an existing artifact.",
         "Reports artifact_exists and offers --overwrite or a versioned path."
       ]
@@ -27,7 +27,7 @@
       "prompt": "模型返回了一个 JSON，里面有 data[0].b64_json。帮我保存成图片。",
       "expected_output": "The agent saves the payload with save_image.py, which validates the container and decodes the bitmap before writing.",
       "files": [],
-      "expectations": [
+      "assertions": [
         "Accepts the images-API response shape as input.",
         "Validates the container and decodes the bitmap before writing.",
         "Writes a provenance sidecar alongside the image."
@@ -38,7 +38,7 @@
       "prompt": "把一张返回的图片存成 out.png，但那个 payload 的最后几个字节被截断了。",
       "expected_output": "The agent reports invalid_image instead of writing a corrupt file.",
       "files": [],
-      "expectations": [
+      "assertions": [
         "Detects the truncated container.",
         "Writes no artifact when verification fails.",
         "Reports the failure honestly rather than saving a placeholder."
@@ -49,7 +49,7 @@
       "prompt": "为品牌公众号做 3 套主题首图，横版和方图，最后放官方 Logo 和标题。",
       "expected_output": "The agent runs a bounded candidate set as separate requests, keeps generated pixels free of logo and typography, and derives crops deterministically.",
       "files": [],
-      "expectations": [
+      "assertions": [
         "Does not ask the model to generate the official logo or final text.",
         "Uses separate requests with distinct output paths for the candidates.",
         "Derives variants with scripts/make_variants.py.",
@@ -61,7 +61,7 @@
       "prompt": "图生成好了，但我的编辑器里没显示。再生成一次吧。",
       "expected_output": "The agent refuses to regenerate, points at the saved file and provenance, and treats the display gap as a presentation problem.",
       "files": [],
-      "expectations": [
+      "assertions": [
         "Does not issue a second request for an artifact that already exists.",
         "Returns the existing image and provenance paths.",
         "Explains that delivery is the file, not the UI."
@@ -72,7 +72,7 @@
       "prompt": "生成一组风格统一的机器人海报，并说明每轮修改依据。",
       "expected_output": "The agent states subject and style invariants up front, changes one variable per iteration, and does not claim reference-image consistency the model cannot provide.",
       "files": [],
-      "expectations": [
+      "assertions": [
         "Defines invariants before generating.",
         "Changes one named variable per iteration.",
         "Does not claim edit or reference-image support without evidence."
@@ -83,7 +83,7 @@
       "prompt": "Codex 说图片已经生成完成了，但界面里没有附件，工作区里也没有文件。把那张图交付给我。",
       "expected_output": "The agent recovers the completed call from the harness task log with scripts/recover_harness_image.py, saves it through save_image.py, and reports the artifact path, SHA-256 and provenance path instead of generating a second image.",
       "files": [],
-      "expectations": [
+      "assertions": [
         "Recovers the completed result instead of calling the model again.",
         "Marks before the call and extracts after it, when the generation still has to be made.",
         "Saves through scripts/save_image.py so the recovered artifact carries ab-image-gen.result.v1 provenance.",
